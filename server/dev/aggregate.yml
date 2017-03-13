@@ -1,0 +1,10 @@
+app_name: aggregate
+
+server:
+  rpc_port: 50313
+  http_port: 50314
+
+
+aggregate_client:
+  dsn: :50313
+  timeout: 10
