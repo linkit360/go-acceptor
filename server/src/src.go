@@ -11,9 +11,9 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 
-	"github.com/vostrok/aggregate/rpcclient"
-	"github.com/vostrok/aggregate/server/src/config"
-	"github.com/vostrok/aggregate/server/src/handlers"
+	"github.com/vostrok/acceptor/rpcclient"
+	"github.com/vostrok/acceptor/server/src/config"
+	"github.com/vostrok/acceptor/server/src/handlers"
 	m "github.com/vostrok/utils/metrics"
 )
 

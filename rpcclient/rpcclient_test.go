@@ -6,7 +6,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/vostrok/aggregate/server/src/handlers"
+	"github.com/vostrok/acceptor/server/src/handlers"
 )
 
 func init() {

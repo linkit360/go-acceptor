@@ -11,7 +11,7 @@ import (
 
 func TestConfig(t *testing.T) {
 	var appConfigConfigor AppConfig
-	configPath := "../../dev/aggregate.yml"
+	configPath := "../../dev/acceptor.yml"
 
 	err := configor.Load(&appConfigConfigor, configPath)
 	assert.NoError(t, err, "configor load")

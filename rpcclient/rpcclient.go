@@ -10,7 +10,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/vostrok/aggregate/server/src/handlers"
+	"github.com/vostrok/acceptor/server/src/handlers"
 	m "github.com/vostrok/utils/metrics"
 )
 
@@ -34,9 +34,9 @@ type Metrics struct {
 
 func initMetrics() *Metrics {
 	m := &Metrics{
-		RPCConnectError: m.NewGauge("rpc", "aggregate", "errors", "RPC call errors"),
-		RPCSuccess:      m.NewGauge("rpc", "aggregate", "success", "RPC call success"),
-		NotFound:        m.NewGauge("rpc", "aggregate", "404_errors", "RPC 404 errors"),
+		RPCConnectError: m.NewGauge("rpc", "acceptor", "errors", "RPC call errors"),
+		RPCSuccess:      m.NewGauge("rpc", "acceptor", "success", "RPC call success"),
+		NotFound:        m.NewGauge("rpc", "acceptor", "404_errors", "RPC 404 errors"),
 	}
 	go func() {
 		for range time.Tick(time.Minute) {
@@ -58,10 +58,10 @@ func Init(clientConf RPCClientConfig) error {
 	}
 	if err = cli.dial(); err != nil {
 		err = fmt.Errorf("cli.dial: %s", err.Error())
-		log.WithField("error", err.Error()).Error("aggregate rpc client unavialable")
+		log.WithField("error", err.Error()).Error("acceptor rpc client unavialable")
 		return err
 	}
-	log.WithField("conf", fmt.Sprintf("%#v", clientConf)).Info("aggregate rpc client init done")
+	log.WithField("conf", fmt.Sprintf("%#v", clientConf)).Info("acceptor rpc client init done")
 
 	return nil
 }
@@ -79,13 +79,13 @@ func (c *Client) dial() error {
 		log.WithFields(log.Fields{
 			"dsn":   c.conf.DSN,
 			"error": err.Error(),
-		}).Error("dialing aggregate")
+		}).Error("dialing acceptor")
 		return err
 	}
 	c.connection = jsonrpc.NewClient(conn)
 	log.WithFields(log.Fields{
 		"dsn": c.conf.DSN,
-	}).Debug("dialing aggregate")
+	}).Debug("dialing acceptor")
 	return nil
 }
 
@@ -129,7 +129,7 @@ func SendAggregatedData(data []handlers.Aggregate) error {
 
 func GetRandomAggregate() handlers.Aggregate {
 	return handlers.Aggregate{
-		ReportDate:           time.Now().UTC(),
+		ReportDate:           time.Now().UTC().Unix(),
 		CampaignId:           777,
 		TotalLPHits:          rand.Int63(),
 		TotalLPMsisdnHits:    rand.Int63(),

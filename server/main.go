@@ -1,9 +1,9 @@
 package main
 
 import (
-	aggregate_server "github.com/vostrok/aggregate/server/src"
+	acceptor_server "github.com/vostrok/acceptor/server/src"
 )
 
 func main() {
-	aggregate_server.Run()
+	acceptor_server.Run()
 }

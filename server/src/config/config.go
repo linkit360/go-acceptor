@@ -9,7 +9,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/jinzhu/configor"
 
-	"github.com/vostrok/aggregate/rpcclient"
+	"github.com/vostrok/acceptor/rpcclient"
 )
 
 type ServerConfig struct {
@@ -19,7 +19,7 @@ type ServerConfig struct {
 type AppConfig struct {
 	AppName string                    `yaml:"app_name"`
 	Server  ServerConfig              `yaml:"server"`
-	Client  rpcclient.RPCClientConfig `yaml:"aggregate_client"`
+	Client  rpcclient.RPCClientConfig `yaml:"acceptor_client"`
 }
 
 func LoadConfig() AppConfig {
