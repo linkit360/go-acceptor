@@ -1,9 +1,21 @@
 app_name: acceptor
 
+db:
+  conn_ttl: -1
+  max_open_conns: 15
+  max_idle_conns: 10
+  timeout: 30
+  name: linkit_test
+  user: test
+  pass: test
+  port: 5432
+  host: localhost
+  ssl_mode: disable
+  table_prefix: xmp_
+
 server:
   rpc_port: 50313
   http_port: 50314
-
 
 acceptor_client:
   dsn: :50313

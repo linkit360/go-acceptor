@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/vostrok/acceptor/rpcclient"
+	"github.com/vostrok/acceptor/server/src/base"
 	"github.com/vostrok/acceptor/server/src/config"
 	"github.com/vostrok/acceptor/server/src/handlers"
 	m "github.com/vostrok/utils/metrics"
@@ -20,8 +21,9 @@ import (
 var appConfig config.AppConfig
 
 func Run() {
-
 	appConfig = config.LoadConfig()
+
+	base.Init(appConfig.DbConf)
 
 	handlers.InitMetrics()
 
@@ -50,9 +52,8 @@ func runRPC(appConfig config.AppConfig) {
 	l, err := net.Listen("tcp", "127.0.0.1:"+appConfig.Server.RPCPort)
 	if err != nil {
 		log.Fatal("netListen ", err.Error())
-	} else {
-		log.WithField("port", appConfig.Server.RPCPort).Info("rpc port")
 	}
+	log.WithField("port", appConfig.Server.RPCPort).Info("rpc port")
 
 	server := rpc.NewServer()
 	server.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
@@ -69,7 +70,7 @@ func runRPC(appConfig config.AppConfig) {
 
 func TestSend(c *gin.Context) {
 	begin := time.Now()
-	var data = []handlers.Aggregate{}
+	var data = []base.Aggregate{}
 	data = append(data, rpcclient.GetRandomAggregate())
 	data = append(data, rpcclient.GetRandomAggregate())
 

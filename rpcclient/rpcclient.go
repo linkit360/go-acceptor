@@ -10,6 +10,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
+	"github.com/vostrok/acceptor/server/src/base"
 	"github.com/vostrok/acceptor/server/src/handlers"
 	m "github.com/vostrok/utils/metrics"
 )
@@ -117,7 +118,7 @@ func call(funcName string, req interface{}, res interface{}) error {
 	return nil
 }
 
-func SendAggregatedData(data []handlers.Aggregate) error {
+func SendAggregatedData(data []base.Aggregate) error {
 	var res handlers.Response
 	err := call(
 		"Aggregate.Receive",
@@ -127,8 +128,8 @@ func SendAggregatedData(data []handlers.Aggregate) error {
 	return err
 }
 
-func GetRandomAggregate() handlers.Aggregate {
-	return handlers.Aggregate{
+func GetRandomAggregate() base.Aggregate {
+	return base.Aggregate{
 		ReportDate:           time.Now().UTC().Unix(),
 		CampaignId:           777,
 		TotalLPHits:          rand.Int63(),
