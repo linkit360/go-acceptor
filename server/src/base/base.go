@@ -11,15 +11,15 @@ var config db.DataBaseConfig
 
 type Aggregate struct {
 	ReportDate   int64  `json:"report_date,omitempty"`
-	Campaign     int32  `json:"id_campaign,omitempty"`
+	Campaign     int64  `json:"id_campaign,omitempty"`
 	Provider     string `json:"id_provider,omitempty"`
-	Operator     int32  `json:"id_operator,omitempty"`
-	LPHits       int32  `json:"total_lp_hits,omitempty"`
-	LPMsisdnHits int32  `json:"total_lp_msisdn_hits,omitempty"`
-	Mo           int32  `json:"total_mo,omitempty"`
-	MoUniq       int32  `json:"total_mo_uniq,omitempty"`
-	MoSuccess    int32  `json:"total_mo_success_charge,omitempty"`
-	Pixels       int32  `json:"total_pixels_sent,omitempty"`
+	Operator     int64  `json:"id_operator,omitempty"`
+	LPHits       int64  `json:"total_lp_hits,omitempty"`
+	LPMsisdnHits int64  `json:"total_lp_msisdn_hits,omitempty"`
+	Mo           int64  `json:"total_mo,omitempty"`
+	MoUniq       int64  `json:"total_mo_uniq,omitempty"`
+	MoSuccess    int64  `json:"total_mo_success_charge,omitempty"`
+	Pixels       int64  `json:"total_pixels_sent,omitempty"`
 }
 
 func Init(dbConfig db.DataBaseConfig) {

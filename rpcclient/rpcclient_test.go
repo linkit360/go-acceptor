@@ -10,10 +10,11 @@ import (
 )
 
 func init() {
-	c := RPCClientConfig{
+	c := ClientConfig{
 		DSN:     "localhost:50313",
 		Timeout: 10,
 	}
+
 	if err := Init(c); err != nil {
 		log.WithField("error", err.Error()).Fatal("cannot init client")
 	}

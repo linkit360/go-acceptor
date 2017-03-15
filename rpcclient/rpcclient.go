@@ -48,6 +48,7 @@ func initMetrics() *Metrics {
 	}()
 	return metrics
 }
+
 func Init(clientConf ClientConfig) error {
 	if cli != nil {
 		return nil
@@ -134,11 +135,11 @@ func GetRandomAggregate() base.Aggregate {
 		Campaign:     777,
 		Provider:     "abc",
 		Operator:     888,
-		LPHits:       rand.Int31(),
-		LPMsisdnHits: rand.Int31(),
-		Mo:           rand.Int31(),
-		MoUniq:       rand.Int31(),
-		MoSuccess:    rand.Int31(),
-		Pixels:       rand.Int31(),
+		LPHits:       rand.Int63(),
+		LPMsisdnHits: rand.Int63(),
+		Mo:           rand.Int63(),
+		MoUniq:       rand.Int63(),
+		MoSuccess:    rand.Int63(),
+		Pixels:       rand.Int63(),
 	}
 }
