@@ -19,10 +19,10 @@ var cli *Client
 
 type Client struct {
 	connection *rpc.Client
-	conf       RPCClientConfig
+	conf       ClientConfig
 	m          *Metrics
 }
-type RPCClientConfig struct {
+type ClientConfig struct {
 	DSN     string `default:":50307" yaml:"dsn"`
 	Timeout int    `default:"10" yaml:"timeout"`
 }
@@ -34,21 +34,21 @@ type Metrics struct {
 }
 
 func initMetrics() *Metrics {
-	m := &Metrics{
+	metrics := &Metrics{
 		RPCConnectError: m.NewGauge("rpc", "acceptor", "errors", "RPC call errors"),
 		RPCSuccess:      m.NewGauge("rpc", "acceptor", "success", "RPC call success"),
 		NotFound:        m.NewGauge("rpc", "acceptor", "404_errors", "RPC 404 errors"),
 	}
 	go func() {
 		for range time.Tick(time.Minute) {
-			m.RPCConnectError.Update()
-			m.RPCSuccess.Update()
-			m.NotFound.Update()
+			metrics.RPCConnectError.Update()
+			metrics.RPCSuccess.Update()
+			metrics.NotFound.Update()
 		}
 	}()
-	return m
+	return metrics
 }
-func Init(clientConf RPCClientConfig) error {
+func Init(clientConf ClientConfig) error {
 	if cli != nil {
 		return nil
 	}
@@ -130,13 +130,15 @@ func SendAggregatedData(data []base.Aggregate) error {
 
 func GetRandomAggregate() base.Aggregate {
 	return base.Aggregate{
-		ReportDate:           time.Now().UTC().Unix(),
-		CampaignId:           777,
-		TotalLPHits:          rand.Int63(),
-		TotalLPMsisdnHits:    rand.Int63(),
-		TotalMO:              rand.Int63(),
-		TotalMOUniq:          rand.Int63(),
-		TotalMOSuccessCharge: rand.Int63(),
-		TotalPixelsSent:      rand.Int63(),
+		ReportDate:   time.Now().UTC().Unix(),
+		Campaign:     777,
+		Provider:     "abc",
+		Operator:     888,
+		LPHits:       rand.Int31(),
+		LPMsisdnHits: rand.Int31(),
+		Mo:           rand.Int31(),
+		MoUniq:       rand.Int31(),
+		MoSuccess:    rand.Int31(),
+		Pixels:       rand.Int31(),
 	}
 }

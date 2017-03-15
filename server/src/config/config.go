@@ -18,10 +18,10 @@ type ServerConfig struct {
 	HttpPort string `default:"50308" yaml:"http_port"`
 }
 type AppConfig struct {
-	AppName string                    `yaml:"app_name"`
-	Server  ServerConfig              `yaml:"server"`
-	Client  rpcclient.RPCClientConfig `yaml:"acceptor_client"`
-	DbConf  db.DataBaseConfig         `yaml:"db"`
+	AppName string                 `yaml:"app_name"`
+	Server  ServerConfig           `yaml:"server"`
+	Client  rpcclient.ClientConfig `yaml:"acceptor_client"`
+	DbConf  db.DataBaseConfig      `yaml:"db"`
 }
 
 func LoadConfig() AppConfig {
