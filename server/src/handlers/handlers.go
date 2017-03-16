@@ -2,6 +2,7 @@ package handlers
 
 import (
 	log "github.com/Sirupsen/logrus"
+
 	"github.com/vostrok/acceptor/server/src/base"
 )
 

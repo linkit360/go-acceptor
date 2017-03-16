@@ -132,14 +132,15 @@ func SendAggregatedData(data []base.Aggregate) error {
 func GetRandomAggregate() base.Aggregate {
 	return base.Aggregate{
 		ReportDate:   time.Now().UTC().Unix(),
-		Campaign:     777,
+		CampaignId:   777,
 		Provider:     "abc",
-		Operator:     888,
+		OperatorCode: 888,
 		LPHits:       rand.Int63(),
 		LPMsisdnHits: rand.Int63(),
 		Mo:           rand.Int63(),
 		MoUniq:       rand.Int63(),
-		MoSuccess:    rand.Int63(),
+		MoCharge:     rand.Int63(),
+		RetryCharge:  rand.Int63(),
 		Pixels:       rand.Int63(),
 	}
 }

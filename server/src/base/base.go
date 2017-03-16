@@ -3,6 +3,7 @@ package base
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/vostrok/utils/db"
 )
 
@@ -11,14 +12,15 @@ var config db.DataBaseConfig
 
 type Aggregate struct {
 	ReportDate   int64  `json:"report_date,omitempty"`
-	Campaign     int64  `json:"id_campaign,omitempty"`
+	CampaignId   int64  `json:"id_campaign,omitempty"`
 	Provider     string `json:"id_provider,omitempty"`
-	Operator     int64  `json:"id_operator,omitempty"`
-	LPHits       int64  `json:"total_lp_hits,omitempty"`
-	LPMsisdnHits int64  `json:"total_lp_msisdn_hits,omitempty"`
-	Mo           int64  `json:"total_mo,omitempty"`
-	MoUniq       int64  `json:"total_mo_uniq,omitempty"`
-	MoSuccess    int64  `json:"total_mo_success_charge,omitempty"`
+	OperatorCode int64  `json:"operator_code,omitempty"`
+	LPHits       int64  `json:"lp_hits,omitempty"`
+	LPMsisdnHits int64  `json:"lp_msisdn_hits,omitempty"`
+	Mo           int64  `json:"mo,omitempty"`
+	MoUniq       int64  `json:"mo_uniq,omitempty"`
+	MoCharge     int64  `json:"mo_charge,omitempty"`
+	RetryCharge  int64  `json:"retry_charge,omitempty"`
 	Pixels       int64  `json:"total_pixels_sent,omitempty"`
 }
 
@@ -40,18 +42,31 @@ func SaveRows(rows []Aggregate) error {
 			"mo, "+
 			"mo_uniq, "+
 			"mo_success, "+
+			"retry_success, "+
 			"pixels"+
 
 			") VALUES ("+
 
-			"to_timestamp($1), $2, $3, $4, $5, $6, $7, $8, $9, $10"+
+			"to_timestamp($1), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11"+
 
 			");",
 		config.TablePrefix)
 
 	//TODO: make bulk request
 	for _, row := range rows {
-		if _, err := pgsql.Exec(query, row.ReportDate, row.Campaign, row.Provider, row.Operator, row.LPHits, row.LPMsisdnHits, row.Mo, row.MoUniq, row.MoSuccess, row.Pixels); err != nil {
+		if _, err := pgsql.Exec(query,
+			row.ReportDate,
+			row.CampaignId,
+			row.Provider,
+			row.OperatorCode,
+			row.LPHits,
+			row.LPMsisdnHits,
+			row.Mo,
+			row.MoUniq,
+			row.MoCharge,
+			row.RetryCharge,
+			row.Pixels,
+		); err != nil {
 			fmt.Println(err.Error())
 		}
 	}

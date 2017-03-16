@@ -70,6 +70,7 @@ func runRPC(appConfig config.AppConfig) {
 
 func TestSend(c *gin.Context) {
 	begin := time.Now()
+
 	var data = []base.Aggregate{}
 	data = append(data, rpcclient.GetRandomAggregate())
 	data = append(data, rpcclient.GetRandomAggregate())
