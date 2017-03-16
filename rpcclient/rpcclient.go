@@ -139,8 +139,8 @@ func GetRandomAggregate() base.Aggregate {
 		LPMsisdnHits: rand.Int63(),
 		Mo:           rand.Int63(),
 		MoUniq:       rand.Int63(),
-		MoCharge:     rand.Int63(),
-		RetryCharge:  rand.Int63(),
+		MoSuccess:    rand.Int63(),
+		RetrySuccess: rand.Int63(),
 		Pixels:       rand.Int63(),
 	}
 }

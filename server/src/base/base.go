@@ -19,9 +19,9 @@ type Aggregate struct {
 	LPMsisdnHits int64  `json:"lp_msisdn_hits,omitempty"`
 	Mo           int64  `json:"mo,omitempty"`
 	MoUniq       int64  `json:"mo_uniq,omitempty"`
-	MoCharge     int64  `json:"mo_charge,omitempty"`
-	RetryCharge  int64  `json:"retry_charge,omitempty"`
-	Pixels       int64  `json:"total_pixels_sent,omitempty"`
+	MoSuccess    int64  `json:"mo_success,omitempty"`
+	RetrySuccess int64  `json:"retry_success,omitempty"`
+	Pixels       int64  `json:"pixels_sent,omitempty"`
 }
 
 func Init(dbConfig db.DataBaseConfig) {
@@ -63,8 +63,8 @@ func SaveRows(rows []Aggregate) error {
 			row.LPMsisdnHits,
 			row.Mo,
 			row.MoUniq,
-			row.MoCharge,
-			row.RetryCharge,
+			row.MoSuccess,
+			row.RetrySuccess,
 			row.Pixels,
 		); err != nil {
 			fmt.Println(err.Error())
