@@ -20,3 +20,9 @@ call:
 
 buildalpine:
 	CC=$(which musl-gcc) go build --ldflags '-w -linkmode external -extldflags "-static"' -o  bin/acceptor-alpine
+
+cp:
+	cp bin/acceptor-linux-amd64 ~/linkit/; cp dev/acceptor-dev.yml ~/linkit/;
+
+tail:
+	tail -10  /var/log/linkit/acceptor.log
