@@ -1,12 +1,10 @@
 package rpcclient
 
 import (
-	"testing"
-
 	log "github.com/Sirupsen/logrus"
+	"github.com/linkit360/go-acceptor/server/src/handlers"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/vostrok/acceptor/server/src/handlers"
+	"testing"
 )
 
 func init() {

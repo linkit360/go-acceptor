@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/vostrok/utils/db"
+	"github.com/linkit360/go-utils/db"
 )
 
 var pgsql *sql.DB

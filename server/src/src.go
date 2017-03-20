@@ -1,21 +1,19 @@
 package src
 
 import (
+	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/gin"
+	"github.com/linkit360/go-acceptor/rpcclient"
+	"github.com/linkit360/go-acceptor/server/src/base"
+	"github.com/linkit360/go-acceptor/server/src/config"
+	"github.com/linkit360/go-acceptor/server/src/handlers"
+	m "github.com/linkit360/go-utils/metrics"
 	"net"
 	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"runtime"
 	"time"
-
-	log "github.com/Sirupsen/logrus"
-	"github.com/gin-gonic/gin"
-
-	"github.com/vostrok/acceptor/rpcclient"
-	"github.com/vostrok/acceptor/server/src/base"
-	"github.com/vostrok/acceptor/server/src/config"
-	"github.com/vostrok/acceptor/server/src/handlers"
-	m "github.com/vostrok/utils/metrics"
 )
 
 var appConfig config.AppConfig

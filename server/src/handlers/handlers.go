@@ -3,7 +3,7 @@ package handlers
 import (
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/vostrok/acceptor/server/src/base"
+	"github.com/linkit360/go-acceptor/server/src/base"
 )
 
 func init() {
