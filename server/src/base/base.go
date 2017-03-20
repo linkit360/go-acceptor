@@ -3,6 +3,7 @@ package base
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/vostrok/utils/db"
 )
 
@@ -40,11 +41,12 @@ func SaveRows(rows []Aggregate) error {
 			"mo, "+
 			"mo_uniq, "+
 			"mo_success, "+
+			"retry_success, "+
 			"pixels"+
 
 			") VALUES ("+
 
-			"to_timestamp($1), $2, $3, $4, $5, $6, $7, $8, $9, $10"+
+			"to_timestamp($1), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11"+
 
 			");",
 		config.TablePrefix)
