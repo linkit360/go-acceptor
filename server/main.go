@@ -1,7 +1,7 @@
 package main
 
 import (
-	acceptor_server "github.com/vostrok/acceptor/server/src"
+	acceptor_server "github.com/linkit360/go-acceptor/server/src"
 )
 
 func main() {
