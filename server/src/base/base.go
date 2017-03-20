@@ -41,7 +41,7 @@ func SaveRows(rows []Aggregate) error {
 			"lp_msisdn_hits, "+
 			"mo, "+
 			"mo_uniq, "+
-			"mo_success, "+
+			"mo_success, "+"retry_success, "+
 			"pixels"+
 
 			") VALUES ("+
