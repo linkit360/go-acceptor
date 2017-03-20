@@ -138,6 +138,7 @@ func GetRandomAggregate() base.Aggregate {
 		Mo:           rand.Int63n(200),
 		MoUniq:       rand.Int63n(200),
 		MoSuccess:    rand.Int63n(150),
+		RetrySuccess: rand.Int63n(150),
 		Pixels:       rand.Int63n(200),
 	}
 }

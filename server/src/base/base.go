@@ -20,6 +20,7 @@ type Aggregate struct {
 	Mo           int64  `json:"mo,omitempty"`
 	MoUniq       int64  `json:"mo_uniq,omitempty"`
 	MoSuccess    int64  `json:"mo_success,omitempty"`
+	RetrySuccess int64  `json:"retry_success,omitempty"`
 	Pixels       int64  `json:"pixels,omitempty"`
 }
 
@@ -41,7 +42,6 @@ func SaveRows(rows []Aggregate) error {
 			"mo, "+
 			"mo_uniq, "+
 			"mo_success, "+
-			"retry_success, "+
 			"pixels"+
 
 			") VALUES ("+
@@ -53,7 +53,20 @@ func SaveRows(rows []Aggregate) error {
 
 	//TODO: make bulk request
 	for _, row := range rows {
-		if _, err := pgsql.Exec(query, row.ReportAt, row.CampaignId, row.ProviderName, row.OperatorCode, row.LpHits, row.LpMsisdnHits, row.Mo, row.MoUniq, row.MoSuccess, row.Pixels); err != nil {
+		if _, err := pgsql.Exec(
+			query,
+			row.ReportAt,
+			row.CampaignId,
+			row.ProviderName,
+			row.OperatorCode,
+			row.LpHits,
+			row.LpMsisdnHits,
+			row.Mo,
+			row.MoUniq,
+			row.MoSuccess,
+			row.RetrySuccess,
+			row.Pixels,
+		); err != nil {
 			fmt.Println(err.Error())
 		}
 	}
