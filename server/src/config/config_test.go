@@ -11,12 +11,12 @@ import (
 
 func TestConfig(t *testing.T) {
 	var appConfigConfigor AppConfig
-	configPath := "../../dev/acceptor.yml"
+	envConfigPath := "../../dev/acceptor.dev.yml"
 
-	err := configor.Load(&appConfigConfigor, configPath)
+	err := configor.Load(&appConfigConfigor, envConfigPath)
 	assert.NoError(t, err, "configor load")
 
-	data, err := ioutil.ReadFile(configPath)
+	data, err := ioutil.ReadFile(envConfigPath)
 	assert.NoError(t, err, "ioutil.ReadFile load data")
 
 	var appConfigCYaml2 AppConfig

@@ -3,18 +3,20 @@ package config
 import (
 	"flag"
 	"fmt"
+	"os"
+	"strings"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/jinzhu/configor"
 	"github.com/linkit360/go-acceptor/rpcclient"
 	"github.com/linkit360/go-utils/db"
-	"os"
-	"strings"
 )
 
 type ServerConfig struct {
 	RPCPort  string `default:"50307" yaml:"rpc_port"`
 	HttpPort string `default:"50308" yaml:"http_port"`
 }
+
 type AppConfig struct {
 	AppName string                 `yaml:"app_name"`
 	Server  ServerConfig           `yaml:"server"`
@@ -23,7 +25,9 @@ type AppConfig struct {
 }
 
 func LoadConfig() AppConfig {
-	cfg := flag.String("config", "dev/acceptor.yml", "configuration yml file")
+	var envConfigFile string = "dev/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
+
+	cfg := flag.String("config", envConfigFile, "configuration yml file")
 	flag.Parse()
 	var appConfig AppConfig
 
