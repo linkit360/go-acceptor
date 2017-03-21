@@ -2,7 +2,6 @@ package config
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 
@@ -25,7 +24,7 @@ type AppConfig struct {
 }
 
 func LoadConfig() AppConfig {
-	var envConfigFile string = "/go/bin/config/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
+	var envConfigFile string = "config/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
 
 	cfg := flag.String("config", envConfigFile, "configuration yml file")
 	flag.Parse()
@@ -49,7 +48,7 @@ func LoadConfig() AppConfig {
 	appConfig.Server.RPCPort = envString("PORT", appConfig.Server.RPCPort)
 	appConfig.Server.HttpPort = envString("METRICS_PORT", appConfig.Server.HttpPort)
 
-	log.WithField("config", fmt.Sprintf("%#v", appConfig)).Info("Config loaded")
+	log.Info("Config loaded")
 	return appConfig
 }
 
