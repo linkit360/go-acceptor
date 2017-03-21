@@ -25,12 +25,12 @@ type AppConfig struct {
 }
 
 func LoadConfig() AppConfig {
-	var envConfigFile string = "config/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
+	var envConfigFile string = "/go/bin/config/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
 
 	cfg := flag.String("config", envConfigFile, "configuration yml file")
 	flag.Parse()
-	var appConfig AppConfig
 
+	var appConfig AppConfig
 	if *cfg != "" {
 		if err := configor.Load(&appConfig, *cfg); err != nil {
 			log.WithField("config", err.Error()).Fatal("config load error")
