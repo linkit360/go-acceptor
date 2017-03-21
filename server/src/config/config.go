@@ -25,7 +25,7 @@ type AppConfig struct {
 }
 
 func LoadConfig() AppConfig {
-	var envConfigFile string = "dev/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
+	var envConfigFile string = "config/acceptor." + envString("PROJECT_ENV", "dev") + ".yml"
 
 	cfg := flag.String("config", envConfigFile, "configuration yml file")
 	flag.Parse()

@@ -1,10 +1,11 @@
 package rpcclient
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/linkit360/go-acceptor/server/src/handlers"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/linkit360/go-acceptor/server/src/base"
+	"github.com/stretchr/testify/assert"
 )
 
 func init() {
@@ -19,7 +20,7 @@ func init() {
 }
 
 func TestGetAllDestinations(t *testing.T) {
-	data := []handlers.Aggregate{GetRandomAggregate(), GetRandomAggregate()}
+	data := []base.Aggregate{GetRandomAggregate(), GetRandomAggregate()}
 	err := SendAggregatedData(data)
 	assert.NoError(t, err, "No error while send the aggregate data")
 }

@@ -2,15 +2,16 @@ package rpcclient
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
-	"github.com/linkit360/go-acceptor/server/src/base"
-	"github.com/linkit360/go-acceptor/server/src/handlers"
-	m "github.com/linkit360/go-utils/metrics"
 	"math/rand"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/linkit360/go-acceptor/server/src/base"
+	"github.com/linkit360/go-acceptor/server/src/handlers"
+	m "github.com/linkit360/go-utils/metrics"
 )
 
 var cli *Client
