@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/linkit360/go-utils/db"
 )
 
@@ -51,6 +52,7 @@ func SaveRows(rows []Aggregate) error {
 			");",
 		config.TablePrefix)
 
+	var saveCount = 0
 	//TODO: make bulk request
 	for _, row := range rows {
 		if _, err := pgsql.Exec(
@@ -69,7 +71,9 @@ func SaveRows(rows []Aggregate) error {
 		); err != nil {
 			fmt.Println(err.Error())
 		}
+		saveCount += 1
 	}
 
+	log.Info("Reports save: ", saveCount)
 	return nil
 }
