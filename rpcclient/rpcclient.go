@@ -9,6 +9,7 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+
 	"github.com/linkit360/go-acceptor/server/src/base"
 	"github.com/linkit360/go-acceptor/server/src/handlers"
 	m "github.com/linkit360/go-utils/metrics"
@@ -126,6 +127,19 @@ func SendAggregatedData(data []base.Aggregate) error {
 		&res,
 	)
 	return err
+}
+
+func GetBlackList(providerName string) ([]string, error) {
+	var res handlers.BlackListResponse
+	err := call(
+		"BlackList.Get",
+		handlers.BlackListParams{ProviderName: providerName},
+		&res,
+	)
+	if err != nil {
+		return []string{}, err
+	}
+	return res.Msisdns, nil
 }
 
 func GetRandomAggregate() base.Aggregate {

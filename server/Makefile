@@ -11,6 +11,9 @@ run:
 rm:
 	rm -v bin/acceptor-linux-amd64; rm ~/linkit/acceptor-linux-amd64;
 
+dev:
+	go build -o bin/acceptor;
+
 build:
 	export GOOS=linux; export GOARCH=amd64; \
         go build -ldflags "-s -w" -o bin/acceptor-linux-amd64;
