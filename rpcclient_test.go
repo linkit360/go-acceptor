@@ -4,8 +4,9 @@ import (
 	"testing"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/linkit360/go-acceptor/server/src/base"
 	"github.com/stretchr/testify/assert"
+
+	acceptor "github.com/linkit360/go-acceptor-structs"
 )
 
 func init() {
@@ -20,7 +21,13 @@ func init() {
 }
 
 func TestGetAllDestinations(t *testing.T) {
-	data := []base.Aggregate{GetRandomAggregate(), GetRandomAggregate()}
+	data := []acceptor.Aggregate{GetRandomAggregate(), GetRandomAggregate()}
 	err := SendAggregatedData(data)
 	assert.NoError(t, err, "No error while send the aggregate data")
+}
+
+func TestGetBlackList(t *testing.T) {
+	msisdns, err := GetBlackList("cheese")
+	assert.NoError(t, err, "Cheese blacklist")
+	assert.Equal(t, 0, len(msisdns), "Count of blacklisted on cheese")
 }

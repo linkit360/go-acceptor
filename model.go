@@ -2,7 +2,6 @@ package rpcclient
 
 import (
 	"fmt"
-	"math/rand"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -10,8 +9,6 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/linkit360/go-acceptor/server/src/base"
-	"github.com/linkit360/go-acceptor/server/src/handlers"
 	m "github.com/linkit360/go-utils/metrics"
 )
 
@@ -117,43 +114,4 @@ func call(funcName string, req interface{}, res interface{}) error {
 	}).Debug("rpccall")
 	cli.m.RPCSuccess.Inc()
 	return nil
-}
-
-func SendAggregatedData(data []base.Aggregate) error {
-	var res handlers.Response
-	err := call(
-		"Aggregate.Receive",
-		handlers.AggregateData{Aggregated: data},
-		&res,
-	)
-	return err
-}
-
-func GetBlackList(providerName string) ([]string, error) {
-	var res handlers.BlackListResponse
-	err := call(
-		"BlackList.Get",
-		handlers.BlackListParams{ProviderName: providerName},
-		&res,
-	)
-	if err != nil {
-		return []string{}, err
-	}
-	return res.Msisdns, nil
-}
-
-func GetRandomAggregate() base.Aggregate {
-	return base.Aggregate{
-		ReportAt:     time.Now().UTC().Unix(),
-		CampaignId:   rand.Int63n(9),
-		ProviderName: "cheese",
-		OperatorCode: 52000,
-		LpHits:       rand.Int63n(200),
-		LpMsisdnHits: rand.Int63n(150),
-		Mo:           rand.Int63n(200),
-		MoUniq:       rand.Int63n(200),
-		MoSuccess:    rand.Int63n(150),
-		RetrySuccess: rand.Int63n(150),
-		Pixels:       rand.Int63n(200),
-	}
 }
