@@ -17,11 +17,24 @@ func SendAggregatedData(data []acceptor.Aggregate) error {
 	return err
 }
 
-func GetBlackList(providerName string) ([]string, error) {
+func BlackListGet(providerName string) ([]string, error) {
 	var res acceptor.BlackListResponse
 	err := call(
 		"BlackList.Get",
-		acceptor.BlackListParams{ProviderName: providerName},
+		acceptor.BlackListGetParams{ProviderName: providerName},
+		&res,
+	)
+	if err != nil {
+		return []string{}, err
+	}
+	return res.Msisdns, nil
+}
+
+func BlackListAdd(providerName string) ([]string, error) {
+	var res acceptor.BlackListResponse
+	err := call(
+		"BlackList.Add",
+		acceptor.BlackListGetParams{ProviderName: providerName},
 		&res,
 	)
 	if err != nil {

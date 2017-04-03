@@ -1,6 +1,7 @@
 package rpcclient
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"net/rpc"
@@ -20,6 +21,7 @@ type Client struct {
 	m          *Metrics
 }
 type ClientConfig struct {
+	Enabled bool   `yaml:"enabled"`
 	DSN     string `default:":50307" yaml:"dsn"`
 	Timeout int    `default:"10" yaml:"timeout"`
 }
@@ -29,6 +31,12 @@ type Metrics struct {
 	RPCSuccess      m.Gauge
 	NotFound        m.Gauge
 }
+
+func init() {
+	log.SetLevel(log.DebugLevel)
+}
+
+var ERR_DISABLED = errors.New("Disabled")
 
 func initMetrics() *Metrics {
 	metrics := &Metrics{
@@ -55,6 +63,9 @@ func Init(clientConf ClientConfig) error {
 		conf: clientConf,
 		m:    initMetrics(),
 	}
+	if !cli.conf.Enabled {
+		return nil
+	}
 	if err = cli.dial(); err != nil {
 		err = fmt.Errorf("cli.dial: %s", err.Error())
 		log.WithField("error", err.Error()).Error("acceptor rpc client unavialable")
@@ -66,9 +77,11 @@ func Init(clientConf ClientConfig) error {
 }
 
 func (c *Client) dial() error {
+	if !c.conf.Enabled {
+		return nil
+	}
 	if c.connection != nil {
 	}
-
 	conn, err := net.DialTimeout(
 		"tcp",
 		c.conf.DSN,
@@ -89,6 +102,14 @@ func (c *Client) dial() error {
 }
 
 func call(funcName string, req interface{}, res interface{}) error {
+	if cli == nil || cli.connection == nil {
+		return nil
+	}
+	if !cli.conf.Enabled {
+		log.WithFields(log.Fields{}).Debug("disabled")
+		return ERR_DISABLED
+	}
+
 	begin := time.Now()
 	if cli.connection == nil {
 		cli.dial()
@@ -99,7 +120,8 @@ func call(funcName string, req interface{}, res interface{}) error {
 			log.WithFields(log.Fields{
 				"func":  funcName,
 				"error": err.Error(),
-			}).Fatal("call")
+			}).Error("call")
+			return err
 		}
 		log.WithFields(log.Fields{
 			"func":  funcName,
