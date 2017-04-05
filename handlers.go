@@ -30,6 +30,19 @@ func BlackListGet(providerName string) ([]string, error) {
 	return res.Msisdns, nil
 }
 
+func BlackListGetNew(providerName string, time string) ([]string, error) {
+	var res acceptor.BlackListResponse
+	err := call(
+		"BlackList.GetNew",
+		acceptor.BlackListGetParams{ProviderName: providerName, Time: time},
+		&res,
+	)
+	if err != nil {
+		return []string{}, err
+	}
+	return res.Msisdns, nil
+}
+
 func BlackListAdd(providerName string) ([]string, error) {
 	var res acceptor.BlackListResponse
 	err := call(
