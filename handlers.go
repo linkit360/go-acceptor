@@ -43,19 +43,6 @@ func BlackListGetNew(providerName string, time string) ([]string, error) {
 	return res.Msisdns, nil
 }
 
-func BlackListAdd(providerName string) ([]string, error) {
-	var res acceptor.BlackListResponse
-	err := call(
-		"BlackList.Add",
-		acceptor.BlackListGetParams{ProviderName: providerName},
-		&res,
-	)
-	if err != nil {
-		return []string{}, err
-	}
-	return res.Msisdns, nil
-}
-
 func GetRandomAggregate() acceptor.Aggregate {
 	return acceptor.Aggregate{
 		ReportAt:     time.Now().UTC().Unix(),

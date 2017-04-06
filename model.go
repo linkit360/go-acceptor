@@ -9,6 +9,7 @@ import (
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/prometheus/client_golang/prometheus"
 
 	m "github.com/linkit360/go-utils/metrics"
 )
@@ -30,19 +31,21 @@ type Metrics struct {
 	RPCConnectError m.Gauge
 	RPCSuccess      m.Gauge
 	NotFound        m.Gauge
+	Connected       prometheus.Gauge
 }
 
 func init() {
 	log.SetLevel(log.DebugLevel)
 }
 
-var ERR_DISABLED = errors.New("Disabled")
+var ERR_DISCONNECTED = errors.New("Disconnected")
 
 func initMetrics() *Metrics {
 	metrics := &Metrics{
 		RPCConnectError: m.NewGauge("rpc", "acceptor", "errors", "RPC call errors"),
 		RPCSuccess:      m.NewGauge("rpc", "acceptor", "success", "RPC call success"),
 		NotFound:        m.NewGauge("rpc", "acceptor", "404_errors", "RPC 404 errors"),
+		Connected:       m.PrometheusGauge("rpc", "acceptor", "connected", "rpc connected"),
 	}
 	go func() {
 		for range time.Tick(time.Minute) {
@@ -81,6 +84,8 @@ func (c *Client) dial() error {
 		return nil
 	}
 	if c.connection != nil {
+		c.connection.Close()
+		c.connection = nil
 	}
 	conn, err := net.DialTimeout(
 		"tcp",
@@ -94,6 +99,7 @@ func (c *Client) dial() error {
 		}).Error("dialing acceptor")
 		return err
 	}
+
 	c.connection = jsonrpc.NewClient(conn)
 	log.WithFields(log.Fields{
 		"dsn": c.conf.DSN,
@@ -102,12 +108,13 @@ func (c *Client) dial() error {
 }
 
 func call(funcName string, req interface{}, res interface{}) error {
-	if cli == nil || cli.connection == nil {
-		return nil
+	if cli == nil {
+		log.WithFields(log.Fields{}).Debug("disconnected")
+		return ERR_DISCONNECTED
 	}
 	if !cli.conf.Enabled {
-		log.WithFields(log.Fields{}).Debug("disabled")
-		return ERR_DISABLED
+		log.WithFields(log.Fields{}).Debug("disconnected")
+		return ERR_DISCONNECTED
 	}
 
 	begin := time.Now()
@@ -117,11 +124,15 @@ func call(funcName string, req interface{}, res interface{}) error {
 	if err := cli.connection.Call(funcName, req, &res); err != nil {
 		cli.m.RPCConnectError.Inc()
 		if err == rpc.ErrShutdown {
+			// here id Error level, not Fatal
 			log.WithFields(log.Fields{
 				"func":  funcName,
 				"error": err.Error(),
 			}).Error("call")
+			cli.m.Connected.Set(0)
 			return err
+		} else {
+			cli.m.Connected.Set(1)
 		}
 		log.WithFields(log.Fields{
 			"func":  funcName,
@@ -130,6 +141,7 @@ func call(funcName string, req interface{}, res interface{}) error {
 		}).Error("call")
 		return err
 	}
+
 	log.WithFields(log.Fields{
 		"func": funcName,
 		"took": time.Since(begin),
