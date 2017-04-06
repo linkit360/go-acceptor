@@ -1,7 +1,6 @@
 package rpcclient
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"net/rpc"
@@ -37,8 +36,6 @@ type Metrics struct {
 func init() {
 	log.SetLevel(log.DebugLevel)
 }
-
-var ERR_DISCONNECTED = errors.New("Disconnected")
 
 func initMetrics() *Metrics {
 	metrics := &Metrics{
@@ -108,40 +105,32 @@ func (c *Client) dial() error {
 }
 
 func call(funcName string, req interface{}, res interface{}) error {
-	if cli == nil {
-		log.WithFields(log.Fields{}).Debug("disconnected")
-		return ERR_DISCONNECTED
-	}
-	if !cli.conf.Enabled {
-		log.WithFields(log.Fields{}).Debug("disconnected")
-		return ERR_DISCONNECTED
-	}
-
 	begin := time.Now()
-	if cli.connection == nil {
-		cli.dial()
-	}
+
+	retryCount := 0
+retry:
 	if err := cli.connection.Call(funcName, req, &res); err != nil {
 		cli.m.RPCConnectError.Inc()
+
 		if err == rpc.ErrShutdown {
-			// here id Error level, not Fatal
-			log.WithFields(log.Fields{
-				"func":  funcName,
-				"error": err.Error(),
-			}).Error("call")
-			cli.m.Connected.Set(0)
-			return err
-		} else {
-			cli.m.Connected.Set(1)
+			if retryCount < 2 {
+				retryCount = retryCount + 1
+				cli.connection.Close()
+				cli.dial()
+				log.WithFields(log.Fields{
+					"retryCount": retryCount,
+					"error":      err.Error(),
+				}).Debug("retrying..")
+				goto retry
+			}
 		}
+
 		log.WithFields(log.Fields{
 			"func":  funcName,
 			"error": err.Error(),
-			"type":  fmt.Sprintf("%T", err),
 		}).Error("call")
 		return err
 	}
-
 	log.WithFields(log.Fields{
 		"func": funcName,
 		"took": time.Since(begin),
