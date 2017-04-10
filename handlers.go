@@ -59,11 +59,11 @@ func GetRandomAggregate() acceptor.Aggregate {
 	}
 }
 
-func CampaignsGet(country uint) ([]acceptor.CampaignsCampaign, error) {
+func CampaignsGet(provider string) ([]acceptor.CampaignsCampaign, error) {
 	var res acceptor.CampaignsResponse
 	err := call(
 		"Campaigns.Get",
-		acceptor.CampaignsGetParams{Country: country},
+		acceptor.CampaignsGetParams{Provider: provider},
 		&res,
 	)
 	if err != nil {
