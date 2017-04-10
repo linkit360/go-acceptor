@@ -58,3 +58,16 @@ func GetRandomAggregate() acceptor.Aggregate {
 		Pixels:       rand.Int63n(200),
 	}
 }
+
+func CampaignsGet(country uint) ([]acceptor.CampaignsCampaign, error) {
+	var res acceptor.CampaignsResponse
+	err := call(
+		"Campaigns.Get",
+		acceptor.CampaignsGetParams{Country: country},
+		&res,
+	)
+	if err != nil {
+		return []acceptor.CampaignsCampaign{}, err
+	}
+	return res.Campaigns, nil
+}
