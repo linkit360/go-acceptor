@@ -29,7 +29,6 @@ type ClientConfig struct {
 type Metrics struct {
 	RPCConnectError m.Gauge
 	RPCSuccess      m.Gauge
-	NotFound        m.Gauge
 	Connected       prometheus.Gauge
 }
 
@@ -41,14 +40,12 @@ func initMetrics() *Metrics {
 	metrics := &Metrics{
 		RPCConnectError: m.NewGauge("rpc", "acceptor", "errors", "RPC call errors"),
 		RPCSuccess:      m.NewGauge("rpc", "acceptor", "success", "RPC call success"),
-		NotFound:        m.NewGauge("rpc", "acceptor", "404_errors", "RPC 404 errors"),
 		Connected:       m.PrometheusGauge("rpc", "acceptor", "connected", "rpc connected"),
 	}
 	go func() {
 		for range time.Tick(time.Minute) {
 			metrics.RPCConnectError.Update()
 			metrics.RPCSuccess.Update()
-			metrics.NotFound.Update()
 		}
 	}()
 	return metrics
@@ -94,6 +91,7 @@ func (c *Client) dial() error {
 			"dsn":   c.conf.DSN,
 			"error": err.Error(),
 		}).Error("dialing acceptor")
+		cli.m.Connected.Set(0)
 		return err
 	}
 
@@ -101,10 +99,18 @@ func (c *Client) dial() error {
 	log.WithFields(log.Fields{
 		"dsn": c.conf.DSN,
 	}).Debug("dialing acceptor")
+	cli.m.Connected.Set(1)
 	return nil
 }
 
 func call(funcName string, req interface{}, res interface{}) error {
+	if cli == nil {
+		return fmt.Errorf("Acceptor: %s", "disabled")
+	}
+	if !cli.conf.Enabled {
+		return fmt.Errorf("Acceptor: %s", "disabled")
+	}
+
 	begin := time.Now()
 
 	retryCount := 0
@@ -117,9 +123,10 @@ retry:
 				retryCount = retryCount + 1
 				cli.connection.Close()
 				cli.dial()
+
 				log.WithFields(log.Fields{
-					"retryCount": retryCount,
-					"error":      err.Error(),
+					"retry": retryCount,
+					"error": err.Error(),
 				}).Debug("retrying..")
 				goto retry
 			}
