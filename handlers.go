@@ -17,10 +17,23 @@ func SendAggregatedData(data []acceptor.Aggregate) error {
 	return err
 }
 
+func GetContents(providerName string) (map[int64]acceptor.Content, error) {
+	var res acceptor.GetContentsResponse
+	err := call(
+		"Content.GetAll",
+		acceptor.GetContentParams{ProviderName: providerName},
+		&res,
+	)
+	if err != nil {
+		return map[int64]acceptor.Content{}, err
+	}
+	return res.Contents, nil
+}
+
 func GetServices(providerName string) (map[int64]acceptor.Service, error) {
 	var res acceptor.GetServicesResponse
 	err := call(
-		"Services.Get",
+		"Service.GetAll",
 		acceptor.GetServicesParams{ProviderName: providerName},
 		&res,
 	)
