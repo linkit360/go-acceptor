@@ -27,7 +27,7 @@ func TestGetAllDestinations(t *testing.T) {
 }
 
 func TestGetBlackList(t *testing.T) {
-	msisdns, err := BlackListGet("cheese")
+	msisdns, err := GetBlackListed("cheese")
 	assert.NoError(t, err, "Cheese blacklist")
 	assert.Equal(t, 0, len(msisdns), "Count of blacklisted on cheese")
 }
