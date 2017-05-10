@@ -46,7 +46,7 @@ func GetServices(providerName string) (map[int64]acceptor.Service, error) {
 func GetBlackListed(providerName string) ([]string, error) {
 	var res acceptor.BlackListResponse
 	err := call(
-		"BlackList.Get",
+		"BlackList.GetAll",
 		acceptor.BlackListGetParams{ProviderName: providerName},
 		&res,
 	)
