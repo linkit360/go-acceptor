@@ -22,7 +22,7 @@ func init() {
 
 func TestGetAllDestinations(t *testing.T) {
 	data := []acceptor.Aggregate{GetRandomAggregate(), GetRandomAggregate()}
-	err := SendAggregatedData(data)
+	_, err := SendAggregatedData(data)
 	assert.NoError(t, err, "No error while send the aggregate data")
 }
 
