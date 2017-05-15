@@ -14,7 +14,7 @@ func SendAggregatedData(data []acceptor.Aggregate) (acceptor.Response, error) {
 		acceptor.AggregateData{Aggregated: data},
 		&res,
 	)
-	return err
+	return res, err
 }
 
 func GetContents(providerName string) (map[int64]acceptor.Content, error) {
