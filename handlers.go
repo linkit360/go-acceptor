@@ -93,7 +93,7 @@ func GetRandomAggregate() acceptor.Aggregate {
 func CampaignsGet(provider string) ([]acceptor.CampaignsCampaign, error) {
 	var res acceptor.CampaignsResponse
 	err := call(
-		"Campaigns.Get",
+		"Campaign.GetAll",
 		acceptor.CampaignsGetParams{Provider: provider},
 		&res,
 	)
