@@ -30,7 +30,8 @@ func GetContents(providerName string) (map[int64]acceptor.Content, error) {
 	return res.Contents, nil
 }
 
-func GetServices(providerName string) (map[int64]acceptor.Service, error) {
+// map by uuids
+func GetServices(providerName string) (map[string]acceptor.Service, error) {
 	var res acceptor.GetServicesResponse
 	err := call(
 		"Service.GetAll",
@@ -38,7 +39,7 @@ func GetServices(providerName string) (map[int64]acceptor.Service, error) {
 		&res,
 	)
 	if err != nil {
-		return map[int64]acceptor.Service{}, err
+		return map[string]acceptor.Service{}, err
 	}
 	return res.Services, nil
 }
@@ -72,7 +73,7 @@ func GetNewBlackListed(providerName string, time string) ([]string, error) {
 func GetRandomAggregate() acceptor.Aggregate {
 	return acceptor.Aggregate{
 		ReportAt:             time.Now().UTC().Unix(),
-		CampaignId:           rand.Int63n(9),
+		CampaignCode:         "290",
 		ProviderName:         "cheese",
 		OperatorCode:         52000,
 		LpHits:               rand.Int63n(200),
@@ -90,7 +91,7 @@ func GetRandomAggregate() acceptor.Aggregate {
 	}
 }
 
-func CampaignsGet(provider string) ([]acceptor.CampaignsCampaign, error) {
+func CampaignsGet(provider string) ([]acceptor.Campaign, error) {
 	var res acceptor.CampaignsResponse
 	err := call(
 		"Campaign.GetAll",
@@ -98,7 +99,7 @@ func CampaignsGet(provider string) ([]acceptor.CampaignsCampaign, error) {
 		&res,
 	)
 	if err != nil {
-		return []acceptor.CampaignsCampaign{}, err
+		return []acceptor.Campaign{}, err
 	}
 	return res.Campaigns, nil
 }
