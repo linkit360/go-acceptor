@@ -7,11 +7,11 @@ import (
 	acceptor "github.com/linkit360/go-acceptor-structs"
 )
 
-func SendAggregatedData(data []acceptor.Aggregate) (acceptor.Response, error) {
-	var res acceptor.Response
+func SendAggregatedData(data []acceptor.Aggregate) (acceptor.AggregateResponse, error) {
+	var res acceptor.AggregateResponse
 	err := call(
 		"Aggregate.Receive",
-		acceptor.AggregateData{Aggregated: data},
+		acceptor.AggregateRequest{Aggregated: data},
 		&res,
 	)
 	return res, err
