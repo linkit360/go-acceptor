@@ -1,12 +1,6 @@
 package rpcclient
 
-import (
-	"math/rand"
-	"time"
-
-	acceptor "github.com/linkit360/go-acceptor-structs"
-)
-
+/*
 func SendAggregatedData(data []acceptor.Aggregate) (acceptor.AggregateResponse, error) {
 	var res acceptor.AggregateResponse
 	err := call(
@@ -37,3 +31,4 @@ func GetRandomAggregate() acceptor.Aggregate {
 		Pixels:               rand.Int63n(200),
 	}
 }
+*/
