@@ -1,6 +1,10 @@
 package rpcclient
 
-/*
+import (
+	"math/rand"
+	"time"
+)
+
 func SendAggregatedData(data []acceptor.Aggregate) (acceptor.AggregateResponse, error) {
 	var res acceptor.AggregateResponse
 	err := call(
@@ -31,4 +35,3 @@ func GetRandomAggregate() acceptor.Aggregate {
 		Pixels:               rand.Int63n(200),
 	}
 }
-*/

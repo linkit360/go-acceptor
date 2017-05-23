@@ -7,6 +7,10 @@ import (
 	"net/http"
 	"time"
 
+	"net/rpc"
+
+	"bytes"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -57,19 +61,34 @@ func Init(clientConf ClientConfig) error {
 	return nil
 }
 
-func Call(funcName string, res interface{}, args ...string) error {
+func Call(funcName string, res interface{}, req ...interface{}) error {
 	if !config.Enabled {
 		return fmt.Errorf("Acceptor Client Disabled")
 	}
 
 	var url string = "http://" + config.DSN + "/" + funcName + "?instance_id=" + config.InstanceId
-	if len(args) > 0 {
-		for _, arg := range args {
-			url = url + arg
+	var err error
+
+	// GET by default
+	request, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+
+	if len(req) > 0 {
+		// POST
+		jsonValue, err := json.Marshal(req)
+		if err != nil {
+			return err
+		}
+
+		request, err = http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+		if err != nil {
+			return err
 		}
 	}
 
-	response, err := client.Get(url)
+	response, err := client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -120,6 +139,7 @@ func (c *Client) dial() error {
 
 	return nil
 }
+*/
 
 func call(funcName string, req interface{}, res interface{}) error {
 	if cli == nil {
@@ -166,4 +186,3 @@ func call(funcName string, req interface{}, res interface{}) error {
 
 	return nil
 }
-*/
