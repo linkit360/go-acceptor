@@ -1,15 +1,12 @@
 package rpcclient
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
-
-	"net/rpc"
-
-	"bytes"
 
 	log "github.com/Sirupsen/logrus"
 )
@@ -139,7 +136,6 @@ func (c *Client) dial() error {
 
 	return nil
 }
-*/
 
 func call(funcName string, req interface{}, res interface{}) error {
 	if cli == nil {
@@ -186,3 +182,4 @@ func call(funcName string, req interface{}, res interface{}) error {
 
 	return nil
 }
+*/

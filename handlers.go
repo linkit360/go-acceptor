@@ -3,23 +3,26 @@ package rpcclient
 import (
 	"math/rand"
 	"time"
+
+	acceptorStructs "github.com/linkit360/go-acceptor-structs"
 )
 
-func SendAggregatedData(data []acceptor.Aggregate) (acceptor.AggregateResponse, error) {
-	var res acceptor.AggregateResponse
+/*
+func SendAggregatedData(data []acceptorStructs.Aggregate) (acceptorStructs.AggregateResponse, error) {
+	var res acceptorStructs.AggregateResponse
 	err := call(
 		"Aggregate.Receive",
-		acceptor.AggregateRequest{Aggregated: data},
+		acceptorStructs.AggregateRequest{Aggregated: data},
 		&res,
 	)
 	return res, err
 }
+*/
 
-func GetRandomAggregate() acceptor.Aggregate {
-	return acceptor.Aggregate{
+func GetRandomAggregate() acceptorStructs.Aggregate {
+	return acceptorStructs.Aggregate{
 		ReportAt:             time.Now().UTC().Unix(),
 		CampaignCode:         "290",
-		ProviderName:         "cheese",
 		OperatorCode:         52000,
 		LpHits:               rand.Int63n(200),
 		LpMsisdnHits:         rand.Int63n(150),
